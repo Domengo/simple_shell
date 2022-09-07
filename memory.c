@@ -38,7 +38,7 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
  * free_all - Free Array Of Char Pointer And Char Pointer
  * @cmd:Array Pointer
  * @line:Char Pointer
- * Return: Void
+ * Return:Void
  */
 void free_all(char **cmd, char *line)
 {
