@@ -4,7 +4,7 @@
  * history_dis - Display History Of User Input Simple Shell
  * @c:Parsed Command
  * @s:Statue Of Last Excute
- * Return: 0 Succes -1 Fail
+ * Return: 0 For Succes -1  For Fail
  */
 int history_dis(__attribute__((unused))char **c, __attribute__((unused))int s)
 {
