@@ -12,7 +12,7 @@ void prompt(void)
  * @input:User Input
  * @counter:Simple Shell Count Loop
  * @argv:Program Name
- * Return: Void
+ * Return:Void
  */
 void print_error(char *input, int counter, char **argv)
 {
