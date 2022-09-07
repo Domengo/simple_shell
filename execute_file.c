@@ -35,7 +35,7 @@ void read_file(char *filename, char **argv)
  * @counter:Error Counter
  * @fp:File Descriptor
  * @argv:Program Name
- * Return : Excute A line void
+ * Return :Excute A line void
  */
 void treat_file(char *line, int counter, FILE *fp, char **argv)
 {
