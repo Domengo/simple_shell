@@ -21,7 +21,7 @@ unsigned int check_delim(char c, const char *str)
  * _strtok - Token A String Into Token (strtrok)
  * @str: String
  * @delim: Delimiter
- * Return: Pointer To The Next Token Or NULL
+ * Return: Pointer(s) To The Next Token Or NULL
  */
 char *_strtok(char *str, const char *delim)
 {
