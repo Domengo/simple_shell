@@ -3,7 +3,7 @@
 /**
  * handle_builtin - Handle Builtin Command
  * @cmd: Parsed Command
- * @er:statue of last Excute
+ * @er:statue of last Excute(s)
  * Return: -1 Fail 0 Succes (Return :Excute Builtin)
  */
 
