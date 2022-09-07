@@ -1,115 +1,107 @@
 #include "shell.h"
 
 /**
- * _myhistory - displays the history list, one command by line, preceded
- *              with line numbers, starting at 0.
- * @info: Structure containing potential arguments. Used to maintain
- *        constant function prototype.
- *  Return: Always 0
+ * dis_history - Display History Of User Input Simple Shell
+ * @c: Parsed Command
+ * @s: Status of last execute command
+ *
+ * Return: 0 Succes -1 Fail
+ *
  */
-int _myhistory(info_t *info)
+
+int dis_history(__attribute__((unused))char **c, __attribute__((unused))int s)
 {
-	print_list(info->history);
+	char *filename = ".simple_shell_history";
+	FILE *fp;
+	char *line = NULL;
+	size_t len = 0;
+	int counter = 0;
+	char *er;
+
+	fp = fopen(filename, "r");
+	if (fp == NULL)
+	{
+		return (-1);
+	}
+	while ((getline(&line, &len, fp)) != -1)
+	{
+		counter++;
+		er = _itoa(counter);
+		_PRINTF(er);
+		free(er);
+		_PRINTF(" ");
+		_PRINTF(line);
+	}
+	if (line)
+		free(line);
+	fclose(fp);
 	return (0);
 }
 
 /**
- * unset_alias - sets alias to string
- * @info: parameter struct
- * @str: the string alias
+ * print_echo - Excute Normal Echo
+ * @cmd: Parsed Command
  *
- * Return: Always 0 on success, 1 on error
- */
-int unset_alias(info_t *info, char *str)
-{
-	char *p, c;
-	int ret;
-
-	p = _strchr(str, '=');
-	if (!p)
-		return (1);
-	c = *p;
-	*p = 0;
-	ret = delete_node_at_index(&(info->alias),
-		get_node_index(info->alias, node_starts_with(info->alias, str, -1)));
-	*p = c;
-	return (ret);
-}
-
-/**
- * set_alias - sets alias to string
- * @info: parameter struct
- * @str: the string alias
+ * Return: 0 Succes -1 Fail
  *
- * Return: Always 0 on success, 1 on error
  */
-int set_alias(info_t *info, char *str)
+
+int print_echo(char **cmd)
 {
-	char *p;
+	pid_t pid;
+	int status;
 
-	p = _strchr(str, '=');
-	if (!p)
-		return (1);
-	if (!*++p)
-		return (unset_alias(info, str));
-
-	unset_alias(info, str);
-	return (add_node_end(&(info->alias), str, 0) == NULL);
-}
-
-/**
- * print_alias - prints an alias string
- * @node: the alias node
- *
- * Return: Always 0 on success, 1 on error
- */
-int print_alias(list_t *node)
-{
-	char *p = NULL, *a = NULL;
-
-	if (node)
+	pid = fork();
+	if (pid == 0)
 	{
-		p = _strchr(node->str, '=');
-		for (a = node->str; a <= p; a++)
-			_putchar(*a);
-		_putchar('\'');
-		_puts(p + 1);
-		_puts("'\n");
-		return (0);
+		if (execve("/bin/echo", cmd, environ) == -1)
+		{
+			return (-1);
+		}
+		exit(EXIT_FAILURE);
+	}
+	else if (pid < 0)
+	{
+		return (-1);
+	}
+	else
+	{
+		do {
+			waitpid(pid, &status, WUNTRACED);
+		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
 	return (1);
 }
 
 /**
- * _myalias - mimics the alias builtin (man alias)
- * @info: Structure containing potential arguments. Used to maintain
- *          constant function prototype.
- *  Return: Always 0
+ * print_number -Print Unsigned Int Putchar
+ * @n: Unisigned Integer
+ * Return: Void
  */
-int _myalias(info_t *info)
+void print_number(unsigned int n)
 {
-	int i = 0;
-	char *p = NULL;
-	list_t *node = NULL;
+	unsigned int x = n;
 
-	if (info->argc == 1)
-	{
-		node = info->alias;
-		while (node)
-		{
-			print_alias(node);
-			node = node->next;
-		}
-		return (0);
-	}
-	for (i = 1; info->argv[i]; i++)
-	{
-		p = _strchr(info->argv[i], '=');
-		if (p)
-			set_alias(info, info->argv[i]);
-		else
-			print_alias(node_starts_with(info->alias, info->argv[i], '='));
-	}
+	if ((x / 10) > 0)
+		print_number(x / 10);
 
-	return (0);
+	_putchar(x % 10 + '0');
+}
+/**
+ * print_number_in -Print Number Putchar
+ * @n:Integer
+ * Return: void
+ */
+void print_number_in(int n)
+{
+	unsigned int x = n;
+
+	if (n < 0)
+	{
+		_putchar('-');
+		x = -x;
+	}
+	if ((x / 10) > 0)
+		print_number(x / 10);
+	_putchar(x % 10 + '0');
 }
